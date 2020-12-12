@@ -1,0 +1,29 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testb
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: default
+
+logging:
+  level:
+    root: info
+    web: info
+    sql: info
+server:
+  port: 8082
+  ## unsigned CA
+#  ssl:
+#    key-alias: server
+#    key-store: C:\keystore1.p12
+#    key-store-password: 15109215
+#    key-store-type: PKCS12
