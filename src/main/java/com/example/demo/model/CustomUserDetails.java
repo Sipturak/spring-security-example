@@ -58,4 +58,9 @@ public class CustomUserDetails implements UserDetails {
     public void setSecurityPin(String securityPin) {
         this.securityPin = securityPin;
     }
+
+    public UserDto getUserDto () {
+        return userDto;
+    }
+
 }

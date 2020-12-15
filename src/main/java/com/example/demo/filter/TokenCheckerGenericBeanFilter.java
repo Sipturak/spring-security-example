@@ -3,6 +3,7 @@ package com.example.demo.filter;
 import com.example.demo.handler.TokenHandler;
 import com.example.demo.repository.JpaUserRepository;
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,10 @@ public class TokenCheckerGenericBeanFilter extends GenericFilterBean {
 
     @Autowired
     private TokenHandler tokenHandler;
+    @Autowired
+    private TokenHandler.JwtHanlder jwtHanlder;
+    @Autowired
+    private TokenHandler.CustomKeyExchange customKeyExchange;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -35,7 +40,8 @@ public class TokenCheckerGenericBeanFilter extends GenericFilterBean {
         else{
             final String TOKEN = BEARER_HEADER.split(" ")[1];
             try {
-                this.tokenHandler.verify(TOKEN);
+                JWSVerifier jwsVerifier = this.jwtHanlder.jwsVerifier(this.customKeyExchange.getKey());
+                this.tokenHandler.verify(jwsVerifier, TOKEN);
             } catch (JOSEException e) {
                 e.printStackTrace();
             } catch (ParseException e) {

@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.filter.CustomSuccessAuthentication;
 import com.example.demo.filter.TokenCheckerGenericBeanFilter;
+import com.example.demo.handler.TokenHandler;
 import com.example.demo.provider.CustomDaoAuthenticationProvider;
 import com.example.demo.repository.JpaMessageRepository;
 import com.example.demo.service.CustomUserDetailsService;
@@ -28,6 +29,8 @@ public class DemoSecurityApplication {
 
 	@Autowired
 	private JpaMessageRepository jpaMessageRepository;
+	@Autowired
+	private TokenHandler.CustomKeyExchange customKeyExchange;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoSecurityApplication.class, args);
@@ -37,6 +40,7 @@ public class DemoSecurityApplication {
 	CommandLineRunner commandLineRunner (){
 		return args -> {
 			System.out.println("Init application");
+			customKeyExchange.generateKey();
 //			List<Message> messages = new ArrayList<>();
 //			Collections.addAll(messages, new Message("Milos","Maksimovic"),
 //					new Message("nEMANJA", "SADASDASDA"));

@@ -23,18 +23,9 @@ import java.time.ZoneOffset;
 @Component
 public class TokenHandler {
 
-    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
-    private static byte [] sharedS;
+    public static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
-    public String sign (UserDto userDto, HttpServletRequest request) throws JOSEException {
-        SecureRandom random = new SecureRandom();
-        if(sharedS == null) {
-            sharedS = new byte[32];
-            random.nextBytes(sharedS);
-        }
-        JWSSigner signer = new MACSigner(sharedS);
-        SignedJWT signedJWT
-                = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), geJwtClaimsSet(userDto,request));
+    public String sign (JWSSigner signer, SignedJWT signedJWT) throws JOSEException {
         signedJWT.sign(signer);
         System.out.println(signedJWT.serialize());
         return signedJWT.serialize();
@@ -52,14 +43,47 @@ public class TokenHandler {
                 .build();
     }
 
-    public void verify (String token) throws JOSEException, ParseException {
-        JWSVerifier jwsVerifier = new MACVerifier(sharedS);
+    public void verify (JWSVerifier jwsVerifier, String token) throws JOSEException, ParseException { ;
         SignedJWT signedJWT = SignedJWT.parse(token);
         boolean verify = signedJWT.verify(jwsVerifier);
         if(verify){
             //token is valid
         }
 
+    }
+
+    public static class JwtHanlder{
+
+        public SignedJWT signedJWT (JWSHeader jwsHeader, JWTClaimsSet jwtClaimsSet) {
+            return new SignedJWT(jwsHeader, jwtClaimsSet);
+        }
+
+        public JWSHeader jwsHeader (JWSAlgorithm jwsAlgorithm){
+            return  new JWSHeader(jwsAlgorithm);
+        }
+
+        public JWSSigner jwsSigner (byte [] key) throws KeyLengthException {
+            return new MACSigner(key);
+        }
+
+        public JWSVerifier jwsVerifier (byte [] key) throws JOSEException {
+            return new MACVerifier(key);
+        }
+    }
+
+    public static class CustomKeyExchange{
+
+        private static  final byte [] KEY = new byte[32];
+        private SecureRandom secureRandom = new SecureRandom();
+
+        public byte [] generateKey () throws KeyLengthException {
+            secureRandom.nextBytes(KEY);
+            return KEY;
+        }
+
+        public byte [] getKey (){
+            return KEY;
+        }
     }
 
 
