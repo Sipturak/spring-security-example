@@ -48,7 +48,6 @@ public class TokenCheckerGenericBeanFilter extends GenericFilterBean {
                 e.printStackTrace();
             }
         }
-
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

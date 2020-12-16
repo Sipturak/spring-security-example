@@ -10,7 +10,6 @@ public class CustomUserDetails implements UserDetails {
 
     private static final boolean IS_ENABLED = true;
     private final UserDto userDto;
-    private String securityPin;
 
     public CustomUserDetails(UserDto userDto) {
         this.userDto = userDto;
@@ -53,10 +52,6 @@ public class CustomUserDetails implements UserDetails {
 
     public String getSecurityPin() {
         return this.userDto.getSecurityPin();
-    }
-
-    public void setSecurityPin(String securityPin) {
-        this.securityPin = securityPin;
     }
 
     public UserDto getUserDto () {

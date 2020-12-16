@@ -23,8 +23,6 @@ import java.time.ZoneOffset;
 @Component
 public class TokenHandler {
 
-    public static final SecureRandom SECURE_RANDOM = new SecureRandom();
-
     public String sign (JWSSigner signer, SignedJWT signedJWT) throws JOSEException {
         signedJWT.sign(signer);
         System.out.println(signedJWT.serialize());

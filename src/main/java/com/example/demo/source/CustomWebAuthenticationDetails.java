@@ -18,7 +18,4 @@ public class CustomWebAuthenticationDetails extends WebAuthenticationDetails {
         return securityPin;
     }
 
-    public void setSecurityPin(String securityPin) {
-        this.securityPin = securityPin;
-    }
 }
